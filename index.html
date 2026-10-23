@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Wishora - Modern Greeting Wishes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f0c1b;
+            --bg-radial-1: rgba(147, 51, 234, 0.18);
+            --bg-radial-2: rgba(236, 72, 153, 0.15);
+            --bg-radial-3: rgba(59, 130, 246, 0.12);
+            --fg: #f8fafc;
+            --mut: #94a3b8;
+            --card: rgba(30, 27, 51, 0.65);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --card-glow: rgba(168, 85, 247, 0.15);
+            --line: rgba(255, 255, 255, 0.08);
+            --acc: #8b5cf6;
+            --acc-hover: #7c3aed;
+            --acc-glow: rgba(139, 92, 246, 0.4);
+            --accfg: #ffffff;
+            --glass-bg: rgba(23, 18, 41, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.25);
+            --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        :root[data-theme="light"] {
+            --bg: #f3f0f9;
+            --bg-radial-1: rgba(168, 85, 247, 0.12);
+            --bg-radial-2: rgba(244, 114, 182, 0.15);
+            --bg-radial-3: rgba(96, 165, 250, 0.12);
+            --fg: #0f172a;
+            --mut: #64748b;
+            --card: rgba(255, 255, 255, 0.75);
+            --card-border: rgba(255, 255, 255, 0.8);
+            --card-glow: rgba(168, 85, 247, 0.08);
+            --line: rgba(0, 0, 0, 0.06);
+            --acc: #7c3aed;
+            --acc-hover: #6d28d9;
+            --acc-glow: rgba(124, 58, 237, 0.25);
+            --accfg: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.9);
+            --shadow-sm: 0 4px 14px rgba(100, 116, 139, 0.08);
+            --shadow-lg: 0 20px 35px -10px rgba(124, 58, 237, 0.12);
+        }
+
+        html { scroll-padding-top: env(safe-area-inset-top, 0px) }
+        *, *::before, *::after { box-sizing: inherit }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 10% 10%, var(--bg-radial-1), transparent 45%),
+                radial-gradient(circle at 90% 20%, var(--bg-radial-2), transparent 50%),
+                radial-gradient(circle at 50% 85%, var(--bg-radial-3), transparent 55%);
+            background-attachment: fixed;
+            color: var(--fg);
+            font: 15px/1.6 'Plus Jakarta Sans', system-ui, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+        /* Ambient Glowing Background Orbs */
+        .ambient-orbs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.45;
+            animation: orbFloat 22s ease-in-out infinite alternate;
+        }
+
+        .orb-1 {
+            width: 380px;
+            height: 380px;
+            background: linear-gradient(135deg, #a855f7, #ec4899);
+            top: -100px;
+            left: -80px;
+        }
+
+        .orb-2 {
+            width: 420px;
+            height: 420px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            bottom: -120px;
+            right: -100px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+            opacity: 0.25;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(40px, 30px) scale(1.1); }
+            100% { transform: translate(-30px, -40px) scale(0.95); }
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', Georgia, serif; margin: 0; line-height: 1.2 }
+        a { color: inherit; text-decoration: none }
+        button, input, textarea { font: inherit; color: inherit }
+        button { cursor: pointer }
+        :focus-visible { outline: 2px solid var(--acc); outline-offset: 3px }
+
+        .wrap { max-width: 1080px; margin: 0 auto; padding: 24px 20px 80px; position: relative; z-index: 1 }
+
+        /* Top Bar Styling */
+        .top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 28px;
+        }
+
+        .logo {
+            font: 800 28px 'Playfair Display', Georgia, serif;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 10%, var(--acc) 60%, #ec4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        :root[data-theme="light"] .logo {
+            background: linear-gradient(135deg, #0f172a 10%, var(--acc) 60%, #ec4899 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        .logo:hover { transform: translateY(-1px) scale(1.02); }
+
+        .top-right-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin-left: auto;
+        }
+
+        .hero { padding: 24px 0 36px; position: relative; text-align: left }
+        .hero h1 {
+            font-size: clamp(38px, 6vw, 62px);
+            font-weight: 800;
+            max-width: 15ch;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, var(--fg) 20%, var(--acc) 65%, #ec4899 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: heroGradient 8s ease infinite alternate;
+        }
+
+        @keyframes heroGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .hero h2 {
+            font-size: clamp(20px, 3.5vw, 28px);
+            color: var(--mut);
+            font-weight: 600;
+            margin-top: 10px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            opacity: 0.9;
+        }
+
+        .hero p {
+            color: var(--mut);
+            max-width: 52ch;
+            margin: 16px 0 0;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
+            perspective: 1000px;
+        }
+
+        /* Buy Team Coffee Section Styling - Enhanced Glassmorphism & Glowing Pulse */
+        .buy-coffee {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            padding: 10px 16px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm), inset 0 1px 1px rgba(255,255,255,0.15);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .buy-coffee::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(236,72,153,0.5), rgba(139,92,246,0.5), transparent);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.7;
+            animation: pulseGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; }
+        }
+
+        .buy-coffee .qr-code {
+            width: 120px;
+            height: 120px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 4px;
+            border: 1px solid var(--line);
+            object-fit: contain;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .buy-coffee:hover .qr-code { transform: scale(1.05); }
+
+        .buy-coffee-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .buy-coffee-info h4 {
+            margin: 0;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: -0.2px;
+        }
+
+        .buy-coffee-inputs {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .buy-coffee-inputs input {
+            width: 68px;
+            padding: 5px 10px;
+            font-size: 13px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: rgba(0, 0, 0, 0.15);
+            color: var(--fg);
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        :root[data-theme="light"] .buy-coffee-inputs input {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .buy-coffee-inputs input:focus {
+            border-color: var(--acc);
+            box-shadow: 0 0 0 3px var(--acc-glow);
+            outline: none;
+        }
+
+        /* Occasion Cards - Modern 3D Glass Tiles */
+        .occ {
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 24px 20px 20px;
+            text-align: left;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, border-color 0.4s ease;
+            transform-style: preserve-3d;
+            will-change: transform;
+            animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+            animation-delay: calc(var(--i, 0) * 65ms);
+        }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(30px) scale(0.92); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .occ::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.25), transparent 70%);
+            pointer-events: none;
+        }
+
+        .occ::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+            transform: translateX(-150%);
+            transition: transform 0.8s ease;
+            pointer-events: none;
+        }
+
+        .occ:hover::after { transform: translateX(150%); }
+
+        .occ:hover {
+            box-shadow: 0 18px 36px -10px var(--card-glow), var(--shadow-lg);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .occ .em {
+            font-size: 48px;
+            line-height: 1;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-block;
+        }
+
+        .occ:hover .em { transform: scale(1.18) translateZ(15px); }
+        .occ b { font: 800 22px 'Playfair Display', Georgia, serif; letter-spacing: -0.3px; display: block; margin-bottom: 2px; }
+        .occ small { opacity: 0.85; font-size: 13px; font-weight: 500; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        .edit { display: grid; grid-template-columns: 1fr; gap: 28px }
+
+        @media(min-width: 880px) {
+            .edit { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: start }
+            .sticky { position: sticky; top: 20px }
+        }
+
+        /* Glassmorphism Editor Panels */
+        .panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 22px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: panelEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes panelEntrance {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel h3 {
+            font-size: 19px;
+            margin-bottom: 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--fg);
+        }
+
+        label { display: block; font-weight: 600; font-size: 13px; margin: 12px 0 6px; color: var(--mut); text-transform: uppercase; letter-spacing: 0.5px }
+
+        input[type=text], textarea, input[type=file] {
+            width: 100%;
+            border: 1px solid var(--line);
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--fg);
+            border-radius: 14px;
+            padding: 12px 14px;
+            transition: all 0.25s ease;
+        }
+
+        :root[data-theme="light"] input[type=text],
+        :root[data-theme="light"] textarea,
+        :root[data-theme="light"] input[type=file] {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        input[type=text]:focus, textarea:focus {
+            border-color: var(--acc);
+            box-shadow: 0 0 0 4px var(--acc-glow);
+            outline: none;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        :root[data-theme="light"] input[type=text]:focus,
+        :root[data-theme="light"] textarea:focus {
+            background: #ffffff;
+        }
+
+        textarea { min-height: 100px; resize: vertical }
+        .row { display: flex; gap: 12px; flex-wrap: wrap }
+        .row>* { flex: 1 1 140px }
+
+        .chips { display: flex; flex-direction: column; gap: 8px; margin-top: 12px }
+        .chip {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 13.5px;
+            color: var(--fg);
+            transition: all 0.2s ease;
+            line-height: 1.4;
+        }
+
+        .chip:hover {
+            border-color: var(--acc);
+            background: rgba(139, 92, 246, 0.12);
+            transform: translateX(4px);
+        }
+
+        .sw { display: flex; gap: 12px }
+        .sw button {
+            width: 58px;
+            height: 44px;
+            border-radius: 14px;
+            border: 3px solid transparent;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .sw button:hover { transform: scale(1.08); }
+        .sw button[aria-pressed=true] {
+            border-color: var(--fg);
+            transform: scale(1.08);
+            box-shadow: 0 0 0 4px var(--acc-glow);
+        }
+
+        .song {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 14px;
+            transition: background-color 0.2s ease;
+        }
+
+        .song+.song { border-top: 1px solid var(--line) }
+        .song span { flex: 1; font-weight: 600; font-size: 14px; }
+        .song[data-on=true] {
+            background: rgba(139, 92, 246, 0.18);
+            box-shadow: inset 3px 0 0 var(--acc);
+        }
+
+        /* Interactive Controls Styling */
+        .btn {
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--fg);
+            border-radius: 999px;
+            padding: 10px 18px;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            backdrop-filter: blur(8px);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn:active { transform: translateY(0) scale(0.97); }
+
+        .btn.pri {
+            background: linear-gradient(135deg, var(--acc), #ec4899);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 6px 20px -4px var(--acc-glow);
+        }
+
+        .btn.pri:hover {
+            background: linear-gradient(135deg, var(--acc-hover), #db2777);
+            box-shadow: 0 10px 25px -4px var(--acc-glow);
+        }
+
+        .btn.wa {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 6px 20px -4px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn.wa:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            box-shadow: 0 10px 25px -4px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn.sm { padding: 6px 14px; font-size: 13px; }
+
+        .share { display: flex; gap: 10px; flex-wrap: wrap }
+
+        /* Modernized Greeting Card Display */
+        .card {
+            border-radius: 32px;
+            padding: 40px 28px 32px;
+            text-align: center;
+            min-height: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 30px 70px -20px rgba(0, 0, 0, 0.6);
+            animation: cardPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+
+        @keyframes cardPop {
+            from { opacity: 0; transform: scale(0.88) translateY(24px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .card .in {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+        }
+
+        .card .big {
+            font-size: 72px;
+            line-height: 1;
+            animation: floatingBob 3.5s ease-in-out infinite;
+            filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.35));
+        }
+
+        @keyframes floatingBob {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.04); }
+        }
+
+        .card h2 {
+            font-size: clamp(30px, 5.5vw, 44px);
+            font-weight: 800;
+            text-shadow: 0 4px 16px rgba(0,0,0,0.25);
+            letter-spacing: -0.5px;
+        }
+
+        .card .msg {
+            font: 600 clamp(18px, 3.2vw, 23px)/1.5 'Playfair Display', Georgia, serif;
+            max-width: 32ch;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .card .from {
+            font-weight: 700;
+            opacity: 0.95;
+            font-size: 16px;
+            letter-spacing: 0.3px;
+        }
+
+        .card video {
+            width: 100%;
+            max-width: 360px;
+            border-radius: 20px;
+            margin-top: 10px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+        }
+
+        .card audio {
+            width: 100%;
+            max-width: 320px;
+            margin-top: 10px;
+            border-radius: 30px;
+        }
+
+        .back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            color: var(--mut);
+            font-weight: 700;
+            font-size: 14px;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .back:hover { transform: translateX(-4px); color: var(--fg); }
+
+        .open {
+            min-height: 72vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .open>div:first-child {
+            font-size: 80px;
+            animation: floatingBob 2.5s ease-in-out infinite;
+        }
+
+        .open .btn {
+            padding: 14px 32px;
+            font-size: 18px;
+            animation: pulseGlowBtn 2s infinite;
+        }
+
+        @keyframes pulseGlowBtn {
+            0% { box-shadow: 0 0 0 0 var(--acc-glow); }
+            70% { box-shadow: 0 0 0 20px transparent; }
+            100% { box-shadow: 0 0 0 0 transparent; }
+        }
+
+        .fall { position: absolute; top: -40px; font-size: 28px; animation: fall linear forwards; pointer-events: none; z-index: 1 }
+        @keyframes fall { to { transform: translateY(600px) rotate(360deg); opacity: 0.15 } }
+
+        /* FX Canvas Overlays */
+        .fx { position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden }
+        .card[data-fx=cake] { padding-bottom: 130px }
+
+        .bulbs {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 38px;
+            display: flex;
+            justify-content: space-around;
+            padding: 0 8px;
+        }
+
+        .bulbs::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 10px;
+            height: 2px;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .bulbs i {
+            position: relative;
+            top: 11px;
+            width: 12px;
+            height: 18px;
+            border-radius: 50% 50% 45% 45%;
+            background: var(--c);
+            box-shadow: 0 0 14px 5px var(--c);
+            animation: blink 1.4s ease-in-out infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.25; box-shadow: 0 0 3px 1px var(--c) } }
+
+        .star { position: absolute; color: #ffe9a8; animation: tw 2.4s ease-in-out infinite }
+        @keyframes tw { 50% { opacity: 0.15; transform: scale(0.4) } }
+
+        .spark { position: absolute; width: 6px; height: 6px; border-radius: 50%; animation: burst 1.3s ease-out forwards }
+        @keyframes burst { to { transform: translate(var(--x), var(--y)); opacity: 0 } }
+
+        .drop { position: absolute; top: -30px; color: #fff; animation: fall2 linear forwards }
+        @keyframes fall2 { to { transform: translateY(580px) translateX(35px) rotate(220deg) } }
+
+        .rise { position: absolute; bottom: -30px; animation: rise ease-in forwards }
+        @keyframes rise { to { transform: translateY(-520px) translateX(var(--s, 0)); opacity: 0 } }
+
+        .puff { position: absolute; border-radius: 50%; filter: blur(3px); opacity: 0.8; animation: puff 1.7s ease-out forwards }
+        @keyframes puff { from { transform: scale(0) } to { transform: scale(1.1); opacity: 0 } }
+
+        /* Cake Effect */
+        .cake {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            width: 130px;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: auto;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .cake:hover { transform: translateX(-50%) scale(1.05); }
+        .cake .cd { display: flex; gap: 18px; margin-bottom: -2px }
+        .cake .cd i { position: relative; width: 7px; height: 22px; background: repeating-linear-gradient(45deg, #fff 0 4px, #38bdf8 4px 8px); border-radius: 3px }
+
+        .cake .cd b {
+            position: absolute;
+            left: -1px;
+            top: -15px;
+            width: 9px;
+            height: 15px;
+            border-radius: 50% 50% 50% 50%/65% 65% 35% 35%;
+            background: radial-gradient(#fff 15%, #fbbf24 60%);
+            box-shadow: 0 0 12px 4px #fbbf24;
+            animation: fl 0.35s ease-in-out infinite alternate;
+            transform-origin: 50% 100%;
+        }
+
+        @keyframes fl { to { transform: scale(1.15, 0.85) rotate(6deg) } }
+        .cake.out b { display: none }
+        .cake .l1 { width: 68px; height: 24px; background: #f472b6; border-radius: 10px 10px 0 0; box-shadow: inset 0 6px 0 #fff }
+        .cake .l2 { width: 98px; height: 28px; background: #fbcfe8; box-shadow: inset 0 6px 0 #fff }
+        .cake .l3 { width: 130px; height: 32px; background: #ec4899; border-radius: 0 0 14px 14px; box-shadow: inset 0 6px 0 #fff }
+
+        /* Sound EQ Icon */
+        .snd { display: inline-flex; align-items: center }
+        .eq { display: inline-flex; gap: 2px; align-items: flex-end; height: 14px; margin-right: 8px }
+        .eq i { width: 3px; height: 4px; background: currentColor; border-radius: 1px }
+        .snd[aria-pressed=true] .eq i { animation: eq 0.6s ease-in-out infinite alternate }
+        .eq i:nth-child(2) { animation-delay: 0.15s }
+        .eq i:nth-child(3) { animation-delay: 0.3s }
+        .eq i:nth-child(4) { animation-delay: 0.45s }
+        @keyframes eq { to { height: 14px } }
+        .snd[aria-pressed=true] { border-color: var(--acc); box-shadow: 0 0 0 4px var(--acc-glow) }
+
+        /* Trail cursor particles */
+        .trail { position: fixed; pointer-events: none; z-index: 99; font-size: 16px; transform: translate(-50%, -50%); animation: tr 0.8s ease-out forwards }
+        @keyframes tr { to { transform: translate(-50%, calc(-50% + 30px)) scale(0.2); opacity: 0 } }
+
+        /* Floating Toasts */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+            transform: translateX(-50%);
+            background: var(--fg);
+            color: var(--bg);
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            animation: toastPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes toastPop {
+            from { opacity: 0; transform: translate(-50%, 20px) scale(0.9); }
+            to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            *, .orb, .fall, .card, .occ { animation: none !important; transition: none !important; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Ambient Floating Orbs for Visual Depth -->
+    <div class="ambient-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="wrap" id="app"></div>
+
+    <script>
+        const OCC = [
+            { id: 'newyear', n: 'New Year', e: '🎆', h: 270, t: 'Happy New Year!', m: ['Wishing you a year full of joy, health and new beginnings. Happy New Year!', 'May every day of the new year bring you a reason to smile. Cheers to us!', 'New year, new dreams. Let’s make this one our best yet!'] },
+            { id: 'diwali', n: 'Diwali', e: '🪔', h: 28, t: 'Happy Diwali!', m: ['May the festival of lights fill your home with happiness and prosperity. Happy Diwali!', 'Wishing you and your family a sparkling Diwali full of sweets and laughter.', 'May the glow of diyas light up your life. Shubh Deepavali!'] },
+            { id: 'eid', n: 'Eid', e: '🌙', h: 170, t: 'Eid Mubarak!', m: ['Eid Mubarak! May Allah’s blessings bring you peace, joy and good health.', 'Wishing you and your loved ones a blessed and beautiful Eid.', 'May this Eid fill your heart with happiness and your table with good food. Eid Mubarak!'] },
+            { id: 'wedding', n: 'Marriage', e: '💍', h: 335, t: 'Congratulations!', m: ['Congratulations on your wedding! May your life together be filled with love and laughter.', 'Wishing you a lifetime of love, trust and happiness together.', 'Two hearts, one journey. Heartiest wishes on your special day!'] },
+            { id: 'holi', n: 'Holi', e: '🎨', h: 310, t: 'Happy Holi!', m: ['May your life be as colourful as Holi. Happy Holi!', 'Wishing you a festival of colours, sweets and endless fun. Happy Holi!', 'Let’s forget old quarrels and colour each other with love. Holi Hai!'] },
+            { id: 'birthday', n: 'Birthday', e: '🎂', h: 200, t: 'Happy Birthday!', m: ['Happy Birthday! May your day be full of cake, laughter and everyone you love.', 'Another year older, another year better. Have a wonderful birthday!', 'Wishing you all the happiness you deserve today and always. Happy Birthday!'] },
+            { id: 'anniv', n: 'Anniversary', e: '💐', h: 350, t: 'Happy Anniversary!', m: ['Happy Anniversary! Thank you for being the best part of every year.', 'Cheers to your love story and many more years together.', 'Wishing you a day as special as the two of you.'] },
+            { id: 'xmas', n: 'Christmas', e: '🎄', h: 140, t: 'Merry Christmas!', m: ['Merry Christmas! Wishing you warmth, peace and joy this season.', 'May your holidays be merry, bright and full of love.', 'Sending you cozy wishes and festive cheer. Merry Christmas!'] }
+        ];
+
+        const HOME_SONG = { name: 'Main Page Song', src: 'Songs/mainbgsong.mp3' };
+
+        /* Songs shown in the editor's "Song" list */
+        const SONGS = [
+            { name: 'Music 1', src: 'Songs/new year.mp3' },
+            { name: 'Music 2', src: 'Songs/new year 2.mp3' },
+            { name: 'Music 3', src: 'Songs/SONG 3.mp3' },
+            { name: 'Music 4', src: 'Songs/SONG 4.mp3' },
+            { name: 'Music 5', src: 'Songs/SONG 5.mp3' },
+            { name: 'No music', src: null }
+        ];
+
+        const STYLES = [
+            h => ({ bg: `linear-gradient(135deg, hsl(${h} 85% 45%), hsl(${h + 45} 90% 55%))`, fg: '#ffffff' }),
+            h => ({ bg: `linear-gradient(135deg, hsl(${h} 90% 92%), hsl(${h + 40} 85% 82%))`, fg: '#1e1b33' }),
+            h => ({ bg: `linear-gradient(135deg, hsl(${h} 50% 12%), hsl(${h + 30} 55% 24%))`, fg: '#ffffff' })
+        ];
+
+        const $ = s => document.querySelector(s);
+        const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const app = $('#app');
+        let G = null, media = { video: null, audio: null }, player = null, playing = -1;
+
+        /* ---- music (plays your mp3 files) ---- */
+        function stopSong() {
+            if (player) { player.pause(); player = null }
+            playing = -1
+        }
+        function playSong(i, X) {
+            stopSong();
+            const S = X || SONGS[i];
+            if (!S || !S.src) return;
+            player = new Audio(S.src);
+            player.loop = true;
+            player.volume = 0.6;
+            playing = i;
+            player.play().catch(() => { toast('Could not play "' + S.name + '". Check the file path.'); playing = -1; player = null; if ($('#songs')) renderSongs() })
+        }
+
+        /* ---- helpers ---- */
+        function toast(t) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 2400) }
+        function shareLink() {
+            const d = btoa(unescape(encodeURIComponent(JSON.stringify({ o: G.o, to: G.to, from: G.from, msg: G.msg, st: G.st, so: G.so }))));
+            return location.href.split('#')[0] + '#/g/' + d
+        }
+        function shareText() { return `${G.to ? G.to + ', ' : ''}I made a greeting for you: ` }
+        function cardHTML(g, withMedia) {
+            const o = OCC.find(x => x.id === g.o), c = STYLES[g.st](o.h);
+            return `<div class="card" id="card" data-o="${g.o}" style="background:${c.bg};color:${c.fg}"><div class="in">
+  <div class="big">${o.e}</div><h2>${esc(o.t)}</h2>
+  ${g.to ? `<div class="from">Dear ${esc(g.to)},</div>` : ''}
+  <div class="msg">${esc(g.msg)}</div>
+  ${g.from ? `<div class="from">– ${esc(g.from)}</div>` : ''}
+  ${withMedia && media.video ? `<video src="${media.video}" controls playsinline></video>` : ''}
+  ${withMedia && media.audio ? `<audio src="${media.audio}" controls></audio>` : ''}</div></div>`
+        }
+        function confetti(o) {
+            const c = $('#card'); if (!c) return; const em = [o.e, '✨', '🎉', '⭐'];
+            for (let i = 0; i < 22; i++) {
+                const s = document.createElement('span'); s.className = 'fall'; s.textContent = em[i % 4];
+                s.style.left = Math.random() * 95 + '%'; s.style.animationDuration = (3 + Math.random() * 3) + 's'; s.style.animationDelay = Math.random() * 2 + 's'; c.appendChild(s)
+            }
+        }
+
+        /* ---- home page effects ---- */
+        let amb = false;
+        function homeFX() {
+            const sb = $('#snd'), h = $('.hero'); if (!sb || !h) return;
+            const set = () => { sb.setAttribute('aria-pressed', amb); sb.querySelector('span:last-child').textContent = amb ? 'Music on' : 'Music off' };
+            set(); if (amb) playSong(-9, HOME_SONG);
+            sb.onclick = () => { amb = !amb; set(); if (amb) playSong(-9, HOME_SONG); else stopSong() };
+
+            // 3D Card Hover & Tilt Effect
+            document.querySelectorAll('.occ').forEach(a => {
+                a.addEventListener('mousemove', e => {
+                    const r = a.getBoundingClientRect();
+                    const x = e.clientX - r.left;
+                    const y = e.clientY - r.top;
+                    const rx = ((y / r.height) - 0.5) * -16;
+                    const ry = ((x / r.width) - 0.5) * 16;
+                    a.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
+                });
+                a.addEventListener('mouseleave', () => {
+                    a.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+                });
+            });
+        }
+
+        let lt = 0;
+        addEventListener('pointermove', e => {
+            if (!$('.hero') || e.timeStamp - lt < 60 || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+            lt = e.timeStamp;
+            const s = document.createElement('span');
+            s.className = 'trail';
+            s.textContent = ['\u2728', '\u2b50', '\ud83d\udcab', '\ud83c\udf86'][0 | Math.random() * 4];
+            s.style.left = e.clientX + 'px';
+            s.style.top = e.clientY + 'px';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 800);
+        });
+
+        /* ---- event effects ---- */
+        const FX = { newyear: 'fire', diwali: 'lights', eid: 'stars', wedding: 'hearts', holi: 'color', birthday: 'cake', anniv: 'hearts', xmas: 'snow' };
+        function startFX(card, id) {
+            const t = FX[id]; if (!card || !t || matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+            const L = document.createElement('div'); L.className = 'fx'; card.prepend(L); card.dataset.fx = t;
+            const R = (a, b) => a + Math.random() * (b - a);
+            const put = (cls, txt, css, life) => { const s = document.createElement('span'); s.className = cls; s.textContent = txt || ''; s.style.cssText = css; L.appendChild(s); setTimeout(() => s.remove(), life) };
+            if (t === 'lights' || t === 'snow') {
+                const w = document.createElement('div'); w.className = 'bulbs'; const cs = ['#ff4d4d', '#ffd23f', '#3ddc84', '#4db8ff', '#ff7ad9'];
+                for (let i = 0; i < 14; i++) { const b = document.createElement('i'); b.style.cssText = `--c:${cs[i % 5]};animation-delay:${(i % 5) * .3}s`; w.appendChild(b) } L.appendChild(w)
+            }
+            if (t === 'stars') for (let i = 0; i < 18; i++)put('star', '✦', `left:${R(2, 96)}%;top:${R(2, 90)}%;font-size:${R(8, 18)}px;animation-delay:${R(0, 3)}s`, 1e9);
+            if (t === 'cake') {
+                const c = document.createElement('div'); c.className = 'cake'; c.title = 'Tap to blow out the candles';
+                c.innerHTML = '<div class="cd"><i><b></b></i><i><b></b></i><i><b></b></i></div><div class="l1"></div><div class="l2"></div><div class="l3"></div>';
+                c.onclick = () => c.classList.toggle('out'); L.appendChild(c)
+            }
+            const rise = (em, a, b, d) => () => put('rise', em[0 | R(0, em.length)], `left:${R(5, 95)}%;font-size:${R(a, b)}px;--s:${R(-40, 40)}px;animation-duration:${R(d, d + 3)}s`, (d + 3) * 1000 + 200);
+            const T = {
+                fire: [850, () => { const x = R(15, 85), y = R(12, 55), h = 0 | R(0, 360); for (let i = 0; i < 16; i++) { const a = i / 16 * 6.283, d = R(50, 85); put('spark', '', `left:${x}%;top:${y}%;background:hsl(${h} 95% 60%);box-shadow:0 0 8px hsl(${h} 95% 60%);--x:${Math.cos(a) * d}px;--y:${Math.sin(a) * d}px`, 1300) } }],
+                lights: [450, rise(['✨'], 12, 22, 3)],
+                stars: [2500, rise(['🏮', '🌙'], 18, 28, 5)],
+                hearts: [500, rise(['💗', '💖', '💞', '🌸'], 14, 26, 4)],
+                cake: [1100, rise(['🎈', '🎈', '🎉', '🎊'], 22, 34, 5)],
+                snow: [260, () => put('drop', '❄', `left:${R(0, 100)}%;font-size:${R(10, 22)}px;animation-duration:${R(5, 9)}s;opacity:${R(.5, 1)}`, 9500)],
+                color: [600, () => { const s = R(60, 130), h = 0 | R(0, 360); put('puff', '', `left:${R(0, 85)}%;top:${R(0, 80)}%;width:${s}px;height:${s}px;background:hsl(${h} 90% 55%)`, 1700) }]
+            }[t];
+            if (T) { T[1](); const iv = setInterval(() => { if (!card.isConnected) return clearInterval(iv); T[1]() }, T[0]) }
+        }
+
+        /* ---- views ---- */
+        function home() {
+            stopSong();
+            app.innerHTML = `<div class="top">
+                <a class="logo" href="#/">✨ Wishora</a>
+                <div class="top-right-actions">
+                    <button class="btn snd" id="snd" aria-pressed="false"><span class="eq"><i></i><i></i><i></i><i></i></span><span>Music off</span></button>
+                    <div class="buy-coffee">
+                        <img src="qr 1.jpeg" alt="QR Code" class="qr-code">
+                        <div class="buy-coffee-info">
+                            <h4>Send a little surprise to our team also</h4>
+                            <div class="buy-coffee-inputs">
+                                <input type="number" id="coffee-amt" placeholder="₹50" value="50" min="10">
+                                <button class="btn sm pri" onclick="sendTip()">Pay</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+  <section class="hero"><h1>A special wish for your special people.</h1><h2>अपनों के लिए एक खास शुभकामना।</h2>
+  <p>Choose an occasion, write your wishes, add a song, voice note, or short video, and share it with your loved ones on WhatsApp or Gmail.</p></section>
+  <div class="grid">${OCC.map((o, i) => { const c = STYLES[0](o.h); return `<a class="occ" href="#/o/${o.id}" style="background:${c.bg};--i:${i}"><span class="em">${o.e}</span><span><b>${o.n}</b><small>${o.m.length} ready-made wishes</small></span></a>` }).join('')}</div>`;
+            homeFX();
+        }
+
+        function sendTip() {
+            const amt = $('#coffee-amt').value || 50;
+            const upiUrl = `upi://pay?pa=yourname@upi&pn=WishoraTeam&am=${amt}&cu=INR`;
+            window.location.href = upiUrl;
+        }
+
+        function renderSongs() {
+            $('#songs').innerHTML = SONGS.map((s, i) => `<div class="song" data-on="${G.so === i}"><span>${esc(s.name)}</span>${s.src ? `<button class="btn sm" data-p="${i}">${playing === i ? '■ Stop' : '▶ Play'}</button>` : ''}<button class="btn sm" data-s="${i}">${G.so === i ? 'Selected' : 'Select'}</button></div>`).join('')
+        }
+
+        function editor(id) {
+            const o = OCC.find(x => x.id === id); if (!o) return home();
+            if (!G || G.o !== id) { G = { o: id, to: '', from: '', msg: o.m[0], st: 0, so: 0 }; media = { video: null, audio: null } }
+            stopSong();
+            app.innerHTML = `<div class="top"><a class="logo" href="#/">✨ Wishora</a></div>
+  <a class="back" href="#/">‹ All occasions</a>
+  <div class="edit">
+   <div class="sticky"><div id="prev"></div></div>
+   <div>
+    <div class="panel"><h3>${o.e} Your message</h3>
+     <div class="row"><div><label for="to">To</label><input type="text" id="to" maxlength="40" placeholder="Their name"></div>
+     <div><label for="from">From</label><input type="text" id="from" maxlength="40" placeholder="Your name"></div></div>
+     <label for="msg">Message</label><textarea id="msg" maxlength="400"></textarea>
+     <div class="chips">${o.m.map((m, i) => `<button class="chip" data-m="${i}">${esc(m)}</button>`).join('')}</div></div>
+    <div class="panel"><h3>Colours</h3><div class="sw">${STYLES.map((f, i) => `<button data-st="${i}" aria-label="Style ${i + 1}" aria-pressed="${G.st === i}" style="background:${f(o.h).bg}"></button>`).join('')}</div></div>
+    <div class="panel"><h3>Song</h3><div id="songs"></div></div>
+    <div class="panel"><h3>Your own video or voice</h3>
+     <label for="vid">Short video</label><input type="file" id="vid" accept="video/*">
+     <label for="aud">Voice clip</label>
+     <div class="row"><input type="file" id="aud" accept="audio/*"><button class="btn" id="rec">● Record voice</button></div> <br>
+    <div class="panel"><h3>Send it</h3><div class="share">
+     <button class="btn wa" id="wa">WhatsApp</button><button class="btn pri" id="gm">Gmail</button>
+     <button class="btn" id="cp">Copy link</button><button class="btn" id="pv">Preview as receiver</button></div>
+   </div></div>`;
+            const redraw = () => {
+                const p = $('#prev'), c = p.firstElementChild;
+                if (!c || c.dataset.o !== G.o) { p.innerHTML = cardHTML(G, true); startFX($('#card'), G.o); return }
+                const n = document.createElement('div'); n.innerHTML = cardHTML(G, true); const nc = n.firstElementChild;
+                c.style.cssText = nc.style.cssText; c.querySelector('.in').innerHTML = nc.querySelector('.in').innerHTML
+            };
+            $('#to').value = G.to; $('#from').value = G.from; $('#msg').value = G.msg; redraw();
+            renderSongs();
+            $('#to').oninput = e => { G.to = e.target.value; redraw() };
+            $('#from').oninput = e => { G.from = e.target.value; redraw() };
+            $('#msg').oninput = e => { G.msg = e.target.value; redraw() };
+            document.querySelectorAll('[data-m]').forEach(b => b.onclick = () => { G.msg = o.m[b.dataset.m]; $('#msg').value = G.msg; redraw() });
+            document.querySelectorAll('[data-st]').forEach(b => b.onclick = () => { G.st = +b.dataset.st; document.querySelectorAll('[data-st]').forEach(x => x.setAttribute('aria-pressed', x === b)); redraw() });
+            $('#songs').onclick = e => {
+                const b = e.target.closest('button'); if (!b) return;
+                if (b.dataset.p !== undefined) { const i = +b.dataset.p; playing === i ? stopSong() : playSong(i) }
+                if (b.dataset.s !== undefined) { G.so = +b.dataset.s }
+                renderSongs()
+            };
+            const MAX = 20 * 1024 * 1024;
+            $('#vid').onchange = e => { const f = e.target.files[0]; if (!f) return; if (f.size > MAX) { toast('Video must be under 20 MB'); e.target.value = ''; return } media.video = URL.createObjectURL(f); redraw() };
+            $('#aud').onchange = e => { const f = e.target.files[0]; if (!f) return; if (f.size > MAX) { toast('Audio must be under 20 MB'); e.target.value = ''; return } media.audio = URL.createObjectURL(f); redraw() };
+            let mr = null;
+            $('#rec').onclick = async () => {
+                if (mr) { mr.stop(); return }
+                try {
+                    const st = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const ch = []; mr = new MediaRecorder(st);
+                    mr.ondataavailable = e => ch.push(e.data);
+                    mr.onstop = () => {
+                        media.audio = URL.createObjectURL(new Blob(ch, { type: 'audio/webm' }));
+                        $('#rec').textContent = '● Record voice'; mr = null; redraw();
+                        st.getTracks().forEach(t => t.stop());
+                    };
+                    mr.start(); $('#rec').textContent = '■ Stop recording';
+                } catch { toast('Microphone access denied') }
+            };
+
+            $('#wa').onclick = () => window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText() + shareLink())}`);
+            $('#gm').onclick = () => window.open(`https://mail.google.com/mail/?view=cm&fs=1&su=${encodeURIComponent('A special greeting for you')}&body=${encodeURIComponent(shareText() + shareLink())}`);
+            $('#cp').onclick = () => { navigator.clipboard.writeText(shareLink()); toast('Link copied!') };
+            $('#pv').onclick = () => location.hash = '#/g/' + btoa(unescape(encodeURIComponent(JSON.stringify({ o: G.o, to: G.to, from: G.from, msg: G.msg, st: G.st, so: G.so }))));
+        }
+
+        function receiver(data) {
+            try {
+                const g = JSON.parse(decodeURIComponent(escape(atob(data))));
+                stopSong();
+                app.innerHTML = `<div class="open"><div>🎉</div><h2>Someone sent you a greeting!</h2><button class="btn pri" id="op">Tap to open</button></div>`;
+                $('#op').onclick = () => {
+                    app.innerHTML = `<div class="top"><a class="logo" href="#/">✨ Wishora</a><a class="btn sm" href="#/">Create your own</a></div>` + cardHTML(g, false);
+                    startFX($('#card'), g.o);
+                    confetti(OCC.find(x => x.id === g.o));
+                    if (g.so !== undefined && g.so >= 0) playSong(g.so);
+                };
+            } catch { home(); }
+        }
+
+        /* ---- Simple Hash Router ---- */
+        function route() {
+            const h = location.hash || '#/';
+            if (h.startsWith('#/o/')) editor(h.slice(4));
+            else if (h.startsWith('#/g/')) receiver(h.slice(4));
+            else home();
+        }
+
+        window.addEventListener('hashchange', route);
+        window.addEventListener('load', route);
+    </script>
+</body>
+
+</html>
